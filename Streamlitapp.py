@@ -3,58 +3,56 @@ import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 import urduhack
 
-# Function to preprocess text using urduhack
-def preprocess_urdu_text(text):
-    normalized_text = urduhack.normalize(text)
-    punc_removed = urduhack.remove_punctuation(normalized_text)
-    accent_removed = urduhack.remove_accents(punc_removed)
-    url_replaced = urduhack.replace_urls(accent_removed)
-    email_replaced = urduhack.replace_emails(url_replaced)
-    number_replaced = urduhack.replace_numbers(email_replaced)
-    currency_replaced = urduhack.replace_currency_symbols(number_replaced)
-    english_removed = urduhack.remove_english_alphabets(currency_replaced)
-    whitespace_normalized = urduhack.normalize_whitespace(english_removed)
-    stopwords_removed = urduhack.remove_stopwords(whitespace_normalized)
-    lemmatized_text = urduhack.lemitizeStr(stopwords_removed)
-    return lemmatized_text
+loaded_model = pickle.load(open("traind_LR_classifier.pkle", "rb"))
 
-def load_model(file_path):
-    try:
-        # Load the trained model
-        model = pickle.load(open(file_path, "rb"))
-        return model
-    except Exception as e:
-        st.error(f"Error loading the model: {e}")
-        return None
+def predict_sentiment(urdu_string):
+    # Convert the Urdu string into a DataFrame
+    df_new = pd.DataFrame({'review': [urdu_string]})
 
+    # Apply UrduHack preprocessing
+    df_new['review'] = df_new['review'].apply(normalize)
+    df_new['review'] = df_new['review'].apply(remove_punctuation)
+    df_new['review'] = df_new['review'].apply(remove_accents)
+    df_new['review'] = df_new['review'].apply(replace_urls)
+    df_new['review'] = df_new['review'].apply(replace_emails)
+    df_new['review'] = df_new['review'].apply(replace_numbers)
+    df_new['review'] = df_new['review'].apply(replace_currency_symbols)
+    df_new['review'] = df_new['review'].apply(remove_english_alphabets)
+    df_new['review'] = df_new['review'].apply(normalize_whitespace)
+
+    # Remove stopwords
+    df_new['review'] = df_new['review'].apply(remove_stopwords)
+
+    # Lemmatize the text
+    df_new['lemmatized_text'] = df_new['review'].apply(lemitizeStr)
+
+    # Apply TF-IDF Vectorization
+    new_test_vecs = TfidfVectorizer(max_features=max_feature_num, vocabulary=vectorizer.vocabulary_).fit_transform(df_new['lemmatized_text'])
+
+    # Store the new vectorized text in a new variable
+    new_text_vec = new_test_vecs
+    prediction = loaded_model.predict(new_text_vec)
+
+    if (prediction[0] == 0):
+      return 'The coment is negative'
+    else:
+      return 'The coment is positive'
+
+# Import the necessary libraries
+from streamlit import cli as st
+
+# Define the main function
 def main():
-    st.title('Urdu Sentiment Prediction')
+    # Create a form to get input from the user
+    with st.form("my_form"):
+        text_input = st.text_area("Enter your Urdu text here:")
+        submit_button = st.form_submit_button("Predict")
 
-    # Load the model
-    loaded_model = load_model("trained_LR_classifier.pkle")
-    if loaded_model is None:
-        return
+    # If the submit button is clicked, predict the sentiment
+    if submit_button:
+        prediction = predict_sentiment(text_input)
+        st.write(prediction)
 
-    # Create a text area for user input
-    user_input = st.text_area('Enter your Urdu comment:', height=100)
-
-    # Create a button for prediction
-    if st.button('Predict'):
-        # Preprocess the user input
-        lemmatized_text = preprocess_urdu_text(user_input)
-
-        # Vectorize the preprocessed text
-        vectorizer = TfidfVectorizer(max_features=max_feature_num, vocabulary=your_vocabulary)
-        new_test_vecs = vectorizer.fit_transform([lemmatized_text])
-
-        # Predict the sentiment
-        prediction = loaded_model.predict(new_test_vecs)[0]
-
-        # Display the prediction
-        st.write('The comment is positive.' if prediction == 1 else 'The comment is negative.')
-
-# Run the Streamlit app
-if __name__ == '__main__':
-    max_feature_num = 1000  # Adjust this value based on your needs
-    your_vocabulary = None  # Replace with your vocabulary or None to use the default
+# Run the main function
+if __name__ == "__main__":
     main()
