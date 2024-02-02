@@ -4,6 +4,7 @@ import pandas as pd
 import urduhack
 import pickle
 import streamlit as st
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load the trained model
 loaded_model = pickle.load(open("traind_LR_classifier.pkle", "rb"))
