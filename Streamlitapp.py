@@ -38,8 +38,6 @@ def predict_sentiment(urdu_string):
     else:
       return 'The coment is positive'
 
-# Import the necessary libraries
-from streamlit import cli as st
 
 # Define the main function
 def main():
