@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 import urduhack
-
+urduhack.download()
 from urduhack.normalization import normalize
 from urduhack.preprocessing import normalize_whitespace, remove_punctuation, remove_accents, replace_urls, replace_emails, replace_numbers, replace_currency_symbols, remove_english_alphabets
 loaded_model = pickle.load(open("traind_LR_classifier.pkle", "rb"))
