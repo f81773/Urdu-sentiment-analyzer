@@ -64,7 +64,7 @@ def predict_sentiment(urdu_string):
     df_new['review'] = df_new['review'].apply(remove_stopwords)
 
     # Lemmatize the text
-    df_new['lemmatized_text'] = df_new['review'].apply(lemitizeStr)
+    df_new['lemmatized_text'] = df_new['review'].apply(lemmatize_str)
 
     # Apply TF-IDF Vectorization
     new_test_vecs = TfidfVectorizer(max_features=max_feature_num, vocabulary=vectorizer.vocabulary_).fit_transform(df_new['lemmatized_text'])
