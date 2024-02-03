@@ -36,13 +36,14 @@ def remove_stopwords(text: str):
     return " ".join(word for word in text.split() if word not in STOP_WORDS)
 
 from urduhack.models.lemmatizer import lemmatizer
-def lemitizeStr(str):
+
+def lemmatize_str(input_str):
     lemme_str = ""
-    temp = lemmatizer.lemma_lookup(str)
+    temp = lemmatizer.lemma_lookup(input_str)
     for t in temp:
         lemme_str += t[0] + " "
 
-    return lemme_str
+    return lemme_str.strip()  # Remove trailing space
 
 def predict_sentiment(urdu_string):
     # Convert the Urdu string into a DataFrame
