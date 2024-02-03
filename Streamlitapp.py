@@ -34,7 +34,8 @@ STOP_WORDS: FrozenSet[str] = frozenset("""
 
 def remove_stopwords(text: str):
     return " ".join(word for word in text.split() if word not in STOP_WORDS)
- from urduhack.models.lemmatizer import lemmatizer
+
+from urduhack.models.lemmatizer import lemmatizer
 def lemitizeStr(str):
     lemme_str = ""
     temp = lemmatizer.lemma_lookup(str)
