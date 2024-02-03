@@ -34,6 +34,14 @@ STOP_WORDS: FrozenSet[str] = frozenset("""
 
 def remove_stopwords(text: str):
     return " ".join(word for word in text.split() if word not in STOP_WORDS)
+ from urduhack.models.lemmatizer import lemmatizer
+def lemitizeStr(str):
+    lemme_str = ""
+    temp = lemmatizer.lemma_lookup(str)
+    for t in temp:
+        lemme_str += t[0] + " "
+
+    return lemme_str
 
 def predict_sentiment(urdu_string):
     # Convert the Urdu string into a DataFrame
