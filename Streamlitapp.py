@@ -75,7 +75,9 @@ def predict_sentiment(urdu_string):
   
 
     # Store the new vectorized text in a new variable
+    
     new_text_vec = new_test_vecs
+    new_text_vec = new_text_vec.toarray()
     prediction = loaded_model.predict(new_text_vec)
 
     if (prediction[0] == 0):
