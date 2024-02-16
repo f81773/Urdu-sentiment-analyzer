@@ -68,7 +68,9 @@ def predict_sentiment(urdu_string):
 
     # Apply TF-IDF Vectorization
     max_feature_num = 50000
-    new_test_vecs = TfidfVectorizer(max_features=max_feature_num, vocabulary=vectorizer.vocabulary_).fit_transform(df_new['lemmatized_text'])
+    vectorizer = TfidfVectorizer(max_features=max_feature_num)
+    new_test_vecs = vectorizer.fit_transform(df_new['lemmatized_text'])
+  
 
     # Store the new vectorized text in a new variable
     new_text_vec = new_test_vecs
