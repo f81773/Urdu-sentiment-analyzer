@@ -8,6 +8,7 @@ from urduhack.normalization import normalize
 from urduhack.preprocessing import normalize_whitespace, remove_punctuation, remove_accents, replace_urls, replace_emails, replace_numbers, replace_currency_symbols, remove_english_alphabets
 loaded_model = pickle.load(open("traind_LR_classifier.pkle", "rb"))
 from typing  import FrozenSet
+X_train = pd.read_csv('https://drive.google.com/file/d/1MQRNnPAecLF3NZE55KH-Eb8B2r2dzFkJ/view?usp=sharing')
 #Urdu language stop words list
 STOP_WORDS: FrozenSet[str] = frozenset("""
  آ آئی آئیں آئے آتا آتی آتے آس آمدید آنا آنسہ آنی آنے آپ آگے آہ آہا آیا اب ابھی ابے
@@ -69,14 +70,14 @@ def predict_sentiment(urdu_string):
     # Apply TF-IDF Vectorization
     max_feature_num = 50000
     vectorizer = TfidfVectorizer(max_features=max_feature_num)
-
+    new_test_vecs = vectorizer.fit_transform(X_train) 
     new_test_vecs = TfidfVectorizer(max_features=max_feature_num, vocabulary=vectorizer.vocabulary_).fit_transform(df_new['lemmatized_text'])
   
 
     # Store the new vectorized text in a new variable
     
     new_text_vec = new_test_vecs
-    new_text_vec = new_text_vec.toarray()
+    
     prediction = loaded_model.predict(new_text_vec)
 
     if (prediction[0] == 0):
