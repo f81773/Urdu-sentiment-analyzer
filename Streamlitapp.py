@@ -67,7 +67,7 @@ def predict_sentiment(urdu_string):
     df_new['lemmatized_text'] = df_new['review'].apply(lemmatize_str)
 
     # Apply TF-IDF Vectorization
-    max_feature_num = 50000
+    max_feature_num = 2
     vectorizer = TfidfVectorizer(max_features=max_feature_num)
     
     vectorizer.fit(df_new['lemmatized_text'])
