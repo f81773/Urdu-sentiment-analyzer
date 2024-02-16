@@ -8,7 +8,8 @@ from urduhack.normalization import normalize
 from urduhack.preprocessing import normalize_whitespace, remove_punctuation, remove_accents, replace_urls, replace_emails, replace_numbers, replace_currency_symbols, remove_english_alphabets
 loaded_model = pickle.load(open("traind_LR_classifier.pkle", "rb"))
 from typing  import FrozenSet
-X_train = pd.read_csv('https://drive.google.com/file/d/1MQRNnPAecLF3NZE55KH-Eb8B2r2dzFkJ/view?usp=sharing')
+url = 'https://drive.google.com/file/d/1MQRNnPAecLF3NZE55KH-Eb8B2r2dzFkJ/view?usp=sharing'
+X_train = pd.read_csv(url)
 #Urdu language stop words list
 STOP_WORDS: FrozenSet[str] = frozenset("""
  آ آئی آئیں آئے آتا آتی آتے آس آمدید آنا آنسہ آنی آنے آپ آگے آہ آہا آیا اب ابھی ابے
